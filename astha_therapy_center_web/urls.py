@@ -18,6 +18,9 @@ urlpatterns = [
     path('testimonials/', views.testimonials, name='testimonials'),
     path('therapist/<uuid:therapist_id>/', views.therapist_single, name='therapist_single'),
     
+    # SEO URLs
+    path('sitemap.xml', views.sitemap, name='sitemap'),
+    
     # Authentication URLs
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
@@ -45,4 +48,4 @@ urlpatterns = [
     path('therapy_admin/therapists/<uuid:therapist_id>/edit/', views_admin.therapist_edit, name='admin_therapist_edit'),
     path('therapy_admin/therapists/<uuid:therapist_id>/delete/', views_admin.therapist_delete, name='admin_therapist_delete'),
     path('therapy_admin/therapists/<uuid:therapist_id>/update-status/', views_admin.therapist_update_status, name='admin_therapist_update_status'),
-] 
+]

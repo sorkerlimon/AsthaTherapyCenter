@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /therapy_admin/
+Disallow: /login/
+Disallow: /logout/
+Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://asthatherapycenter.com/sitemap.xml
+Sitemap: http://localhost:8000/sitemap.xml 

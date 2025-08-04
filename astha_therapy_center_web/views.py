@@ -214,9 +214,60 @@ def therapy_admin(request):
     """
     Therapy admin dashboard (requires login)
     """
-    # Import the admin dashboard view from views_admin
-    from .views_admin import admin_dashboard
-    return admin_dashboard(request)
+    # Get statistics for dashboard
+    total_appointments = Appointment.objects.count()
+    pending_appointments = Appointment.objects.filter(status='pending').count()
+    total_contacts = Contact.objects.count()
+    new_contacts = Contact.objects.filter(status='new').count()
+    total_therapists = Therapist.objects.filter(is_active=True).count()
+    
+    context = {
+        'total_appointments': total_appointments,
+        'pending_appointments': pending_appointments,
+        'total_contacts': total_contacts,
+        'new_contacts': new_contacts,
+        'total_therapists': total_therapists,
+    }
+    
+    return render(request, 'admin/dashboard.html', context)
+
+
+def sitemap(request):
+    """
+    Generate XML sitemap for search engines
+    """
+    from django.http import HttpResponse
+    from django.template.loader import render_to_string
+    from datetime import datetime
+    
+    # Get current date for lastmod
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    
+    # Define static pages with their priorities and change frequencies
+    pages = [
+        {'url': '', 'priority': '1.0', 'changefreq': 'weekly', 'lastmod': current_date},
+        {'url': 'about/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': 'service/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': 'therapist/', 'priority': '0.7', 'changefreq': 'weekly', 'lastmod': current_date},
+        {'url': 'contact/', 'priority': '0.6', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': 'appointment/', 'priority': '0.9', 'changefreq': 'weekly', 'lastmod': current_date},
+        {'url': 'blogs/', 'priority': '0.6', 'changefreq': 'weekly', 'lastmod': current_date},
+        {'url': 'faqs/', 'priority': '0.5', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': 'testimonials/', 'priority': '0.5', 'changefreq': 'monthly', 'lastmod': current_date},
+    ]
+    
+    context = {
+        'pages': pages,
+        'current_date': current_date,
+    }
+    
+    # Generate XML sitemap
+    xml_content = render_to_string('sitemap.xml', context)
+    
+    # Return XML response
+    response = HttpResponse(xml_content, content_type='application/xml')
+    response['Content-Type'] = 'application/xml; charset=utf-8'
+    return response
 
 
 
