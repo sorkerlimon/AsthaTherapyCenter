@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ therapist.name }} - Aastha Therapy Center{% endblock %}
+
+{% block page_header %}
+<!-- No page header for therapist single page -->
+{% endblock %}
+
+{% block content %}
+    <!-- Team Details Section Start -->
+    <div class="page-team-single">
+        <div class="container">
+            <div class="row no-gutters">
+				<div class="col-lg-5">
+                    <!-- team member image start -->
+                    <div class="team-member-image">
+                        <figure class="image-anime">
+                            <img src="{{ therapist.profile_image.url }}" alt="{{ therapist.name }}">
+                        </figure>
+                    </div>
+                    <!-- team member image end -->
+                </div>
+                <div class="col-lg-7">
+                    <!-- team member details start -->
+                    <div class="team-member-details">
+                        <div class="member-detail-header">
+                            <h2 class="text-anime-style-2">{{ therapist.name }}</h2>
+                            <p class="wow fadeInUp">{{ therapist.title }}</p>
+                        </div>
+                        <div class="member-detail-content">
+                            <p class="wow fadeInUp" data-wow-delay="0.25s">{{ therapist.bio_short }}</p>                            
+                        </div>
+
+                        <div class="member-detail-body wow fadeInUp" data-wow-delay="0.5s">
+                            <ul>
+                                <li><span>Position</span>{{ therapist.title }}</li>
+                                <li><span>Experience</span>{{ therapist.get_experience_display }}</li>
+                                <li><span>Email</span>{{ therapist.email }}</li>
+                                {% if therapist.phone %}
+                                <li><span>Phone</span>{{ therapist.phone }}</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+                        <div class="member-social-list">
+                            <ul class="wow fadeInUp" data-wow-delay="0.75s">
+                                {% if therapist.facebook_url %}
+                                <li><a href="{{ therapist.facebook_url }}" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                {% endif %}
+                                {% if therapist.youtube_url %}
+                                <li><a href="{{ therapist.youtube_url }}" target="_blank"><i class="fa-brands fa-youtube"></i></a></li>
+                                {% endif %}
+                                {% if therapist.instagram_url %}
+                                <li><a href="{{ therapist.instagram_url }}" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
+                                {% endif %}
+                                {% if therapist.twitter_url %}
+                                <li><a href="{{ therapist.twitter_url }}" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
+                                {% endif %}
+                                {% if therapist.linkedin_url %}
+                                <li><a href="{{ therapist.linkedin_url }}" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- team member details end -->
+                </div>                
+            </div>
+        </div>
+    </div>
+    <!--Team Details Section End -->
+
+    <!-- About Member Details Start -->
+    <div class="about-member-details">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- About Member Info Start -->
+                    <div class="about-member-info">
+                        <div class="member-info-title">
+                            <h2 class="wow fadeInUp">personal info</h2>
+                        </div>
+                        <div class="member-info-content">
+                            {% if therapist.personal_info %}
+                                <p class="wow fadeInUp" data-wow-delay="0.25s">{{ therapist.personal_info }}</p>
+                            {% else %}
+                                <p class="wow fadeInUp" data-wow-delay="0.25s">Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore of magna aliqua. Ut enim ad minim veniam, made of owl the quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea dolor commodo consequat.</p>
+                                <p class="wow fadeInUp" data-wow-delay="0.5s">Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore of magna aliqua.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- About Member Info End -->
+
+                    <!-- Member Winning Awards Start -->
+                    <div class="member-winning-awards">
+                        <!-- Winning Awards Content Start -->
+                        <div class="winning-awards-content">
+                            <h2 class="wow fadeInUp">Awards & Honor</h2>
+                            {% if therapist.awards_info %}
+                                <p class="wow fadeInUp" data-wow-delay="0.25s">{{ therapist.awards_info }}</p>
+                            {% else %}
+                                <p class="wow fadeInUp" data-wow-delay="0.25s">You to resume or maintain a active and power independent life both at home & work.</p>
+                            {% endif %}
+                        </div>
+                        <!-- Winning Awards Content End -->
+                        
+                        <!-- Winning Awards Box Start -->
+                        <div class="winning-awards-box">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="winning-award-img img-box-1">
+                                        <img src="{% static 'images/icon-award-1.svg' %}" alt="">
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="winning-award-img img-box-2">
+                                        <img src="{% static 'images/icon-award-2.svg' %}" alt="">
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="winning-award-img img-box-3">
+                                        <img src="{% static 'images/icon-award-3.svg' %}" alt="">
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="winning-award-img img-box-4">
+                                        <img src="{% static 'images/icon-award-4.svg' %}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Winning Awards Box End -->                   
+                    </div>
+                    <!-- Member Winning Awards End -->
+                </div>
+
+                <div class="col-lg-6">
+                    <!-- Team Member Skills Bar Start -->
+                    <div class="team-member-skills">
+                        <!-- Member Skills Title Start -->
+                        <div class="member-skills-title">
+                            <h2 class="wow fadeInUp">professional skills</h2>
+                        </div>
+                        <!-- Member Skills Title End -->
+
+                        <!-- Skills Progress Bar Start -->
+                        {% for skill in therapist.get_skills_data %}
+                        <div class="skills-progress-bar">
+                            <!-- Skill Item Start -->
+                            <div class="skillbar" data-percent="{{ skill.percentage }}%">
+                                <div class="skill-data">
+                                    <div class="skill-title">{{ skill.name }}</div>
+                                    <div class="skill-no">{{ skill.percentage }}%</div>
+                                </div>
+                                <div class="skill-progress">
+                                    <div class="count-bar"></div>
+                                </div>
+                            </div>
+                            <!-- Skill Item End -->
+                        </div>
+                        <!-- Skills Progress Bar End -->
+                        {% endfor %}
+                    </div>
+                    <!-- Team Member Skills Bar End -->
+
+                    <!-- Team Sidebar Cta Box Start -->
+                    <div class="cta-infobar team-sidebar-cta wow fadeInUp" data-wow-delay="0.25s">
+                        <div class="row align-items-center">
+                            <div class="col-lg-12">
+                                <!-- Cta Content Start -->
+                                <div class="cta-info-content">
+                                    <div class="icon-box">
+                                        <img src="{% static 'images/icon-cta.svg' %}" alt="">
+                                    </div>
+        
+                                    <div class="cta-content">
+                                        <h3>ready to start your journey to recovery?</h3>
+                                        <p>Contact us today to schedule your initial consultation and take the first step towards a pain-free life.</p>
+
+                                        <!-- Cta Appointment Button Start -->
+                                        <div class="cta-appointment-btn">
+                                            <a href="{% url 'astha_therapy_center_web:appointment' %}" class="btn-default">book appointment</a>
+                                        </div>
+                                        <!-- Cta Appointment Button End -->
+                                    </div>
+                                </div>
+                                <!-- Cta Content End -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Team Sidebar Cta Box End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About Member Details End -->
+{% endblock %}

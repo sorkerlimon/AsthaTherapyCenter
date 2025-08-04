@@ -1,0 +1,203 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}Contact Message Details - Astha Therapy Center Admin{% endblock %}
+{% block page_title %}Contact Message Details{% endblock %}
+
+{% block content %}
+<!-- Display Messages -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Back Button -->
+<div class="mb-3">
+    <a href="{% url 'astha_therapy_center_web:admin_contact_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Contact Messages
+    </a>
+</div>
+
+<!-- Contact Details -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Contact Message Details</h5>
+                <div>
+                    <a href="{% url 'astha_therapy_center_web:admin_contact_edit' contact.id %}" class="btn btn-sm btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'astha_therapy_center_web:admin_contact_delete' contact.id %}" class="btn btn-sm btn-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Name:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ contact.name }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Email:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Phone:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Subject:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ contact.subject }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Status:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <span class="badge {{ contact.get_status_badge_class }}">
+                            {{ contact.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Message:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="border p-3 bg-light rounded">
+                            {{ contact.message|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Received:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ contact.created_at|date:"F d, Y g:i A" }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Last Updated:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ contact.updated_at|date:"F d, Y g:i A" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Quick Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    {% if contact.status == 'new' %}
+                        <button class="btn btn-info" onclick="updateStatus('{{ contact.id }}', 'read')">
+                            <i class="fas fa-envelope-open"></i> Mark as Read
+                        </button>
+                    {% endif %}
+                    
+                    {% if contact.status != 'replied' %}
+                        <button class="btn btn-success" onclick="updateStatus('{{ contact.id }}', 'replied')">
+                            <i class="fas fa-reply"></i> Mark as Replied
+                        </button>
+                    {% endif %}
+                    
+                    {% if contact.status != 'closed' %}
+                        <button class="btn btn-secondary" onclick="updateStatus('{{ contact.id }}', 'closed')">
+                            <i class="fas fa-times-circle"></i> Mark as Closed
+                        </button>
+                    {% endif %}
+
+                    <a href="mailto:{{ contact.email }}?subject=Re: {{ contact.subject }}" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i> Reply via Email
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information Card -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Contact Information</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>ID:</strong> {{ contact.id }}</p>
+                <p><strong>Reference:</strong> #{{ contact.id|slice:":8"|upper }}</p>
+                <p class="mb-0"><strong>Priority:</strong> 
+                    {% if contact.status == 'new' %}
+                        <span class="badge bg-warning">New</span>
+                    {% else %}
+                        <span class="badge bg-info">Normal</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Status Updates -->
+<script>
+function updateStatus(contactId, newStatus) {
+    if (confirm('Are you sure you want to update the status?')) {
+        fetch(`/therapy_admin/contacts/${contactId}/update-status/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                'status': newStatus
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error updating status: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating status');
+        });
+    }
+}
+</script>
+
+<!-- Add CSRF token for AJAX -->
+{% csrf_token %}
+{% endblock %}

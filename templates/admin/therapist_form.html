@@ -1,0 +1,362 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}{{ title }} - Admin Dashboard{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ title }}</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Basic Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-user-md"></i> Basic Information
+                                </h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.name.id_for_label }}" class="form-label">Full Name *</label>
+                                    {{ form.name }}
+                                    {% if form.name.errors %}
+                                    <div class="text-danger small">{{ form.name.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.title.id_for_label }}" class="form-label">Professional Title *</label>
+                                    {{ form.title }}
+                                    {% if form.title.errors %}
+                                    <div class="text-danger small">{{ form.title.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="{{ form.experience_years.id_for_label }}" class="form-label">Years of Experience *</label>
+                                    {{ form.experience_years }}
+                                    {% if form.experience_years.errors %}
+                                    <div class="text-danger small">{{ form.experience_years.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">Email *</label>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                    <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="{{ form.phone.id_for_label }}" class="form-label">Phone Number</label>
+                                    {{ form.phone }}
+                                    {% if form.phone.errors %}
+                                    <div class="text-danger small">{{ form.phone.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Content -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-file-alt"></i> Profile Content
+                                </h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.bio_short.id_for_label }}" class="form-label">Short Bio *</label>
+                                    {{ form.bio_short }}
+                                    <div class="form-text">Brief description for therapist cards (max 500 characters)</div>
+                                    {% if form.bio_short.errors %}
+                                    <div class="text-danger small">{{ form.bio_short.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.bio_full.id_for_label }}" class="form-label">Full Biography *</label>
+                                    {{ form.bio_full }}
+                                    <div class="form-text">Detailed biography for therapist detail page</div>
+                                    {% if form.bio_full.errors %}
+                                    <div class="text-danger small">{{ form.bio_full.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.personal_info.id_for_label }}" class="form-label">Personal Information</label>
+                                    {{ form.personal_info }}
+                                    <div class="form-text">Additional personal information (optional)</div>
+                                    {% if form.personal_info.errors %}
+                                    <div class="text-danger small">{{ form.personal_info.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.awards_info.id_for_label }}" class="form-label">Awards & Honors</label>
+                                    {{ form.awards_info }}
+                                    <div class="form-text">Awards, certifications, and honors (optional)</div>
+                                    {% if form.awards_info.errors %}
+                                    <div class="text-danger small">{{ form.awards_info.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Image -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-image"></i> Profile Image
+                                </h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.profile_image.id_for_label }}" class="form-label">Profile Photo *</label>
+                                    {{ form.profile_image }}
+                                    {% if form.profile_image.errors %}
+                                    <div class="text-danger small">{{ form.profile_image.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                {% if therapist and therapist.profile_image %}
+                                <div class="mb-3">
+                                    <label class="form-label">Current Image</label>
+                                    <div>
+                                        <img src="{{ therapist.profile_image.url }}" alt="{{ therapist.name }}" 
+                                             class="img-thumbnail" style="max-width: 200px;">
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Social Media Links -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-share-alt"></i> Social Media Links
+                                </h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.facebook_url.id_for_label }}" class="form-label">Facebook URL</label>
+                                    {{ form.facebook_url }}
+                                    {% if form.facebook_url.errors %}
+                                    <div class="text-danger small">{{ form.facebook_url.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.twitter_url.id_for_label }}" class="form-label">Twitter/X URL</label>
+                                    {{ form.twitter_url }}
+                                    {% if form.twitter_url.errors %}
+                                    <div class="text-danger small">{{ form.twitter_url.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.instagram_url.id_for_label }}" class="form-label">Instagram URL</label>
+                                    {{ form.instagram_url }}
+                                    {% if form.instagram_url.errors %}
+                                    <div class="text-danger small">{{ form.instagram_url.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.youtube_url.id_for_label }}" class="form-label">YouTube URL</label>
+                                    {{ form.youtube_url }}
+                                    {% if form.youtube_url.errors %}
+                                    <div class="text-danger small">{{ form.youtube_url.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.linkedin_url.id_for_label }}" class="form-label">LinkedIn URL</label>
+                                    {{ form.linkedin_url }}
+                                    {% if form.linkedin_url.errors %}
+                                    <div class="text-danger small">{{ form.linkedin_url.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Professional Skills -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-chart-bar"></i> Professional Skills (0-100%)
+                                </h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.skill_patient_diagnosis.id_for_label }}" class="form-label">Patient Diagnosis</label>
+                                    {{ form.skill_patient_diagnosis }}
+                                    {% if form.skill_patient_diagnosis.errors %}
+                                    <div class="text-danger small">{{ form.skill_patient_diagnosis.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.skill_treatment_planning.id_for_label }}" class="form-label">Treatment Planning</label>
+                                    {{ form.skill_treatment_planning }}
+                                    {% if form.skill_treatment_planning.errors %}
+                                    <div class="text-danger small">{{ form.skill_treatment_planning.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.skill_manual_therapy.id_for_label }}" class="form-label">Manual Therapy</label>
+                                    {{ form.skill_manual_therapy }}
+                                    {% if form.skill_manual_therapy.errors %}
+                                    <div class="text-danger small">{{ form.skill_manual_therapy.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.skill_exercise_prescription.id_for_label }}" class="form-label">Exercise Prescription</label>
+                                    {{ form.skill_exercise_prescription }}
+                                    {% if form.skill_exercise_prescription.errors %}
+                                    <div class="text-danger small">{{ form.skill_exercise_prescription.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.skill_electrotherapy.id_for_label }}" class="form-label">Electrotherapy</label>
+                                    {{ form.skill_electrotherapy }}
+                                    {% if form.skill_electrotherapy.errors %}
+                                    <div class="text-danger small">{{ form.skill_electrotherapy.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.skill_interpersonal.id_for_label }}" class="form-label">Interpersonal Skills</label>
+                                    {{ form.skill_interpersonal }}
+                                    {% if form.skill_interpersonal.errors %}
+                                    <div class="text-danger small">{{ form.skill_interpersonal.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Display Settings -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-cog"></i> Display Settings
+                                </h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        {{ form.is_active }}
+                                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                            Active (Show on website)
+                                        </label>
+                                    </div>
+                                    {% if form.is_active.errors %}
+                                    <div class="text-danger small">{{ form.is_active.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.display_order.id_for_label }}" class="form-label">Display Order</label>
+                                    {{ form.display_order }}
+                                    <div class="form-text">Lower numbers appear first</div>
+                                    {% if form.display_order.errors %}
+                                    <div class="text-danger small">{{ form.display_order.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="row">
+                            <div class="col-12">
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{% url 'astha_therapy_center_web:admin_therapist_list' %}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> Back to List
+                                    </a>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> Save Therapist
+                                        </button>
+                                        {% if therapist %}
+                                        <a href="{% url 'astha_therapy_center_web:admin_therapist_detail' therapist.id %}" class="btn btn-info">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Auto-save form data to localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const formData = new FormData(form);
+    
+    // Save form data on input change
+    form.addEventListener('input', function() {
+        const formData = new FormData(form);
+        const data = {};
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+        localStorage.setItem('therapist_form_data', JSON.stringify(data));
+    });
+    
+    // Restore form data on page load
+    const savedData = localStorage.getItem('therapist_form_data');
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        for (let key in data) {
+            const field = form.querySelector(`[name="${key}"]`);
+            if (field && !field.value) {
+                field.value = data[key];
+            }
+        }
+    }
+    
+    // Clear saved data on successful submit
+    form.addEventListener('submit', function() {
+        localStorage.removeItem('therapist_form_data');
+    });
+});
+</script>
+{% endblock %} 

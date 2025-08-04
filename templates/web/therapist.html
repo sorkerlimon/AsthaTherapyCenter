@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Therapists - Aastha Therapy Center{% endblock %}
+
+{% block page_header %}
+<!-- No page header for therapist page -->
+{% endblock %}
+
+{% block content %}
+
+    <!-- Page Team Start -->
+    <div class="page-team">
+        <div class="container">
+            <div class="row">
+                {% for therapist in therapists %}
+                <div class="col-lg-3 col-md-6">
+                    <!-- Team Member Item Start -->
+                    <div class="team-member-item wow fadeInUp" {% if forloop.counter > 1 %}data-wow-delay="0.{{ forloop.counter|add:'-1' }}s"{% endif %}>
+                        <!-- Team Image Start -->
+                        <div class="team-image">
+                            <figure class="image-anime">
+                                <a href="{{ therapist.get_absolute_url }}">
+                                    <img src="{{ therapist.profile_image.url }}" alt="{{ therapist.name }}">
+                                </a>
+                            </figure>
+                
+                            <!-- Team Social Icon Start -->
+                            <div class="team-social-icon">
+                                <ul>
+                                    {% if therapist.facebook_url %}
+                                    <li><a href="{{ therapist.facebook_url }}" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                    {% endif %}
+                                    {% if therapist.youtube_url %}
+                                    <li><a href="{{ therapist.youtube_url }}" class="social-icon" target="_blank"><i class="fa-brands fa-youtube"></i></a></li>
+                                    {% endif %}
+                                    {% if therapist.instagram_url %}
+                                    <li><a href="{{ therapist.instagram_url }}" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
+                                    {% endif %}
+                                    {% if therapist.twitter_url %}
+                                    <li><a href="{{ therapist.twitter_url }}" class="social-icon" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <!-- Team Social Icon End -->
+                        </div>
+                        <!-- Team Image End -->
+                
+                        <!-- Team Content Start -->
+                        <div class="team-content">
+                            <h3><a href="{{ therapist.get_absolute_url }}">{{ therapist.name|lower }}</a></h3>
+                            <p>{{ therapist.title|lower }}</p>
+                        </div>
+                        <!-- Team Content End -->
+                    </div>
+                    <!-- Team Member Item End -->
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <h4>No Therapists Available</h4>
+                        <p>We are currently updating our therapist profiles. Please check back soon!</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Page Team End -->
+{% endblock %}

@@ -1,0 +1,282 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}Dashboard - Astha Therapy Center Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Display Messages -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total Appointments
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_appointments|default:0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Pending Appointments
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pending_appointments|default:0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Confirmed Today
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ confirmed_appointments|default:0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Completed
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ completed_appointments|default:0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Statistics -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-secondary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                            Total Messages
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_contacts|default:0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-envelope fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            New Messages
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ new_contacts|default:0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-envelope-open fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Read Messages
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ read_contacts|default:0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-envelope-open-text fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Replied Messages
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ replied_contacts|default:0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-reply fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Appointments -->
+<div class="row">
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Recent Appointments</h6>
+                <a href="{% url 'astha_therapy_center_web:admin_appointment_list' %}" class="btn btn-primary btn-sm">View All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_appointments %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Service</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appointment in recent_appointments %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ appointment.name }}</strong><br>
+                                        <small class="text-muted">{{ appointment.email }}</small>
+                                    </td>
+                                    <td>{{ appointment.get_service_display }}</td>
+                                    <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="badge {{ appointment.get_status_badge_class }}">
+                                            {{ appointment.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'astha_therapy_center_web:admin_appointment_detail' appointment.id %}" 
+                                           class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-calendar-times fa-3x text-gray-300 mb-3"></i>
+                        <h5 class="text-gray-600">No appointments yet</h5>
+                        <p class="text-muted">Appointments will appear here once patients start booking.</p>
+                        <a href="{% url 'astha_therapy_center_web:admin_appointment_create' %}" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i>Create New Appointment
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'astha_therapy_center_web:admin_appointment_create' %}" class="btn btn-success">
+                        <i class="fas fa-plus me-2"></i>New Appointment
+                    </a>
+                    <a href="{% url 'astha_therapy_center_web:admin_appointment_list' %}" class="btn btn-info">
+                        <i class="fas fa-list me-2"></i>View All Appointments
+                    </a>
+                    <a href="{% url 'astha_therapy_center_web:home' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-external-link-alt me-2"></i>View Website
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Card -->
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Welcome Back!</h6>
+            </div>
+            <div class="card-body text-center">
+                <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
+                <h5>{{ user.get_full_name|default:user.email }}</h5>
+                <p class="text-muted">Admin</p>
+                <small class="text-muted">
+                    Last login: {{ user.last_login|date:"M d, Y H:i"|default:"First time" }}
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+.text-xs {
+    font-size: 0.7rem;
+}
+</style>
+{% endblock content %}

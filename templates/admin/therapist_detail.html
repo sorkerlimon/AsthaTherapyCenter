@@ -1,0 +1,317 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}{{ therapist.name }} - Admin Dashboard{% endblock %}
+
+{% block page_title %}Therapist Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ therapist.name }}</h1>
+        <div>
+            <a href="{% url 'astha_therapy_center_web:admin_therapist_edit' therapist.id %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit Therapist
+            </a>
+            <a href="{% url 'astha_therapy_center_web:admin_therapist_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Basic Information -->
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-user-md"></i> Basic Information
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Name:</strong></td>
+                                    <td>{{ therapist.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Title:</strong></td>
+                                    <td>{{ therapist.title }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Experience:</strong></td>
+                                    <td>{{ therapist.get_experience_display }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td><a href="mailto:{{ therapist.email }}">{{ therapist.email }}</a></td>
+                                </tr>
+                                {% if therapist.phone %}
+                                <tr>
+                                    <td><strong>Phone:</strong></td>
+                                    <td><a href="tel:{{ therapist.phone }}">{{ therapist.phone }}</a></td>
+                                </tr>
+                                {% endif %}
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Status:</strong></td>
+                                    <td>
+                                        <span class="badge {% if therapist.is_active %}badge-success{% else %}badge-secondary{% endif %}">
+                                            {% if therapist.is_active %}Active{% else %}Inactive{% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Display Order:</strong></td>
+                                    <td>{{ therapist.display_order }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Created:</strong></td>
+                                    <td>{{ therapist.created_at|date:"M d, Y" }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Last Updated:</strong></td>
+                                    <td>{{ therapist.updated_at|date:"M d, Y" }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ID:</strong></td>
+                                    <td><code>{{ therapist.id }}</code></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biography -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-file-alt"></i> Biography
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <h6>Short Bio:</h6>
+                    <p class="text-muted">{{ therapist.bio_short }}</p>
+                    
+                    <h6>Full Biography:</h6>
+                    <p>{{ therapist.bio_full|linebreaks }}</p>
+                    
+                    {% if therapist.personal_info %}
+                    <h6>Personal Information:</h6>
+                    <p>{{ therapist.personal_info|linebreaks }}</p>
+                    {% endif %}
+                    
+                    {% if therapist.awards_info %}
+                    <h6>Awards & Honors:</h6>
+                    <p>{{ therapist.awards_info|linebreaks }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Professional Skills -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-chart-bar"></i> Professional Skills
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for skill in therapist.get_skills_data %}
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="text-capitalize">{{ skill.name }}</span>
+                                <span class="badge badge-primary">{{ skill.percentage }}%</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ skill.percentage }}%" 
+                                     aria-valuenow="{{ skill.percentage }}" 
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media Links -->
+            {% if therapist.facebook_url or therapist.twitter_url or therapist.instagram_url or therapist.youtube_url or therapist.linkedin_url %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-share-alt"></i> Social Media Links
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% if therapist.facebook_url %}
+                        <div class="col-md-6 mb-2">
+                            <a href="{{ therapist.facebook_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if therapist.twitter_url %}
+                        <div class="col-md-6 mb-2">
+                            <a href="{{ therapist.twitter_url }}" target="_blank" class="btn btn-outline-info btn-sm">
+                                <i class="fab fa-twitter"></i> Twitter/X
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if therapist.instagram_url %}
+                        <div class="col-md-6 mb-2">
+                            <a href="{{ therapist.instagram_url }}" target="_blank" class="btn btn-outline-danger btn-sm">
+                                <i class="fab fa-instagram"></i> Instagram
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if therapist.youtube_url %}
+                        <div class="col-md-6 mb-2">
+                            <a href="{{ therapist.youtube_url }}" target="_blank" class="btn btn-outline-danger btn-sm">
+                                <i class="fab fa-youtube"></i> YouTube
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if therapist.linkedin_url %}
+                        <div class="col-md-6 mb-2">
+                            <a href="{{ therapist.linkedin_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-linkedin-in"></i> LinkedIn
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Profile Image -->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-image"></i> Profile Image
+                    </h6>
+                </div>
+                <div class="card-body text-center">
+                    {% if therapist.profile_image %}
+                    <img src="{{ therapist.profile_image.url }}" alt="{{ therapist.name }}" 
+                         class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                    <hr>
+                    <small class="text-muted">Image uploaded on: {{ therapist.profile_image.url|slice:"-10:" }}</small>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-user-md fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No profile image uploaded</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-cogs"></i> Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'astha_therapy_center_web:admin_therapist_edit' therapist.id %}" 
+                           class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Edit Therapist
+                        </a>
+                        <a href="{% url 'astha_therapy_center_web:therapist_single' therapist.id %}" 
+                           target="_blank" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i> View on Website
+                        </a>
+                        <a href="{% url 'astha_therapy_center_web:admin_therapist_delete' therapist.id %}" 
+                           class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Delete Therapist
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Toggle -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-toggle-on"></i> Status Control
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="statusToggle" 
+                               {% if therapist.is_active %}checked{% endif %}
+                               data-therapist-id="{{ therapist.id }}">
+                        <label class="form-check-label" for="statusToggle">
+                            Active (Show on website)
+                        </label>
+                    </div>
+                    <small class="text-muted">Toggle to show/hide this therapist on the website</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Status toggle functionality
+document.getElementById('statusToggle').addEventListener('change', function() {
+    const therapistId = this.dataset.therapistId;
+    const isActive = this.checked;
+    const newStatus = isActive ? 'active' : 'inactive';
+    
+    fetch(`/therapy_admin/therapists/${therapistId}/update-status/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({
+            status: newStatus
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success message
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+            alert.innerHTML = `
+                ${data.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            // Remove alert after 3 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        } else {
+            // Show error message
+            alert('Error: ' + data.message);
+            // Revert the toggle
+            this.checked = !isActive;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating status');
+        // Revert the toggle
+        this.checked = !isActive;
+    });
+});
+</script>
+{% endblock %} 

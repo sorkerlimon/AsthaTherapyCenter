@@ -1,0 +1,190 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}Delete Appointment - {{ appointment.name }} - Astha Therapy Center Admin{% endblock %}
+{% block page_title %}Delete Appointment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow border-danger">
+            <div class="card-header py-3 bg-danger text-white">
+                <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion
+                </h6>
+            </div>
+            <div class="card-body">
+                <!-- Warning Message -->
+                <div class="alert alert-danger" role="alert">
+                    <h5 class="alert-heading">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Warning!
+                    </h5>
+                    <p>You are about to permanently delete this appointment. This action cannot be undone.</p>
+                    <hr>
+                    <p class="mb-0">Please review the appointment details below before confirming.</p>
+                </div>
+
+                <!-- Appointment Details -->
+                <div class="bg-light p-3 rounded mb-4">
+                    <h6 class="text-gray-800 mb-3">Appointment Details:</h6>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Patient Name:</strong>
+                        </div>
+                        <div class="col-6">
+                            {{ appointment.name }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Email:</strong>
+                        </div>
+                        <div class="col-6">
+                            {{ appointment.email }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Phone:</strong>
+                        </div>
+                        <div class="col-6">
+                            {{ appointment.phone }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Service:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge bg-info">{{ appointment.get_service_display }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Date:</strong>
+                        </div>
+                        <div class="col-6">
+                            {{ appointment.appointment_date|date:"l, F d, Y" }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Status:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge {{ appointment.get_status_badge_class }}">
+                                {{ appointment.get_status_display }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    {% if appointment.notes %}
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <strong>Notes:</strong>
+                            <div class="mt-1">{{ appointment.notes|linebreaks }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Confirmation Form -->
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="confirmDelete" required>
+                            <label class="form-check-label" for="confirmDelete">
+                                I understand that this action is permanent and cannot be undone
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a href="{% url 'astha_therapy_center_web:admin_appointment_detail' appointment.id %}" 
+                               class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Details
+                            </a>
+                            <a href="{% url 'astha_therapy_center_web:admin_appointment_list' %}" 
+                               class="btn btn-outline-secondary ms-2">
+                                <i class="fas fa-list me-1"></i>Back to List
+                            </a>
+                        </div>
+                        <button type="submit" class="btn btn-danger" id="deleteButton" disabled>
+                            <i class="fas fa-trash me-1"></i>Delete Appointment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Alternative Actions Card -->
+        <div class="card shadow mt-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-lightbulb me-2"></i>Alternative Actions
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Instead of deleting, you might want to:</p>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'astha_therapy_center_web:admin_appointment_edit' appointment.id %}" 
+                       class="btn btn-outline-warning">
+                        <i class="fas fa-edit me-1"></i>Edit Appointment Details
+                    </a>
+                    {% if appointment.status != 'cancelled' %}
+                    <button type="button" class="btn btn-outline-secondary" onclick="updateStatusToCancelled()">
+                        <i class="fas fa-ban me-1"></i>Mark as Cancelled
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Enable/disable delete button based on checkbox
+document.getElementById('confirmDelete').addEventListener('change', function() {
+    document.getElementById('deleteButton').disabled = !this.checked;
+});
+
+// Function to update status to cancelled
+function updateStatusToCancelled() {
+    if (confirm('Are you sure you want to mark this appointment as cancelled?')) {
+        fetch(`{% url 'astha_therapy_center_web:admin_appointment_update_status' appointment.id %}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                status: 'cancelled'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Appointment status updated to cancelled.');
+                window.location.href = "{% url 'astha_therapy_center_web:admin_appointment_detail' appointment.id %}";
+            } else {
+                alert('Error updating status: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating the status.');
+        });
+    }
+}
+</script>
+
+{% endblock content %}

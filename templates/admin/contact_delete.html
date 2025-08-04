@@ -1,0 +1,60 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}Delete Contact Message - Astha Therapy Center Admin{% endblock %}
+{% block page_title %}Delete Contact Message{% endblock %}
+
+{% block content %}
+<!-- Back Button -->
+<div class="mb-3">
+    <a href="{% url 'astha_therapy_center_web:admin_contact_detail' contact.id %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Contact Details
+    </a>
+</div>
+
+<!-- Delete Confirmation -->
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle"></i> Confirm Deletion
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <strong>Warning!</strong> This action cannot be undone.
+                </div>
+                
+                <p>Are you sure you want to delete this contact message?</p>
+                
+                <div class="card bg-light mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ contact.subject }}</h6>
+                        <p class="card-text">
+                            <strong>From:</strong> {{ contact.name }} ({{ contact.email }})<br>
+                            <strong>Date:</strong> {{ contact.created_at|date:"F d, Y g:i A" }}<br>
+                            <strong>Status:</strong> 
+                            <span class="badge {{ contact.get_status_badge_class }}">
+                                {{ contact.get_status_display }}
+                            </span>
+                        </p>
+                        <p class="card-text text-muted">
+                            {{ contact.message|truncatewords:20 }}
+                        </p>
+                    </div>
+                </div>
+
+                <form method="POST" class="d-flex justify-content-between">
+                    {% csrf_token %}
+                    <a href="{% url 'astha_therapy_center_web:admin_contact_detail' contact.id %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Yes, Delete This Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
