@@ -16,7 +16,7 @@
 
 <!-- Statistics Cards -->
 <div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
         <div class="card border-left-warning shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
         <div class="card border-left-info shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
         <div class="card border-left-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -91,7 +91,7 @@
 
 <!-- Contact Statistics -->
 <div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
         <div class="card border-left-secondary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -109,7 +109,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -127,7 +127,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
         <div class="card border-left-info shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -145,7 +145,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
         <div class="card border-left-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -166,7 +166,7 @@
 
 <!-- Recent Appointments -->
 <div class="row">
-    <div class="col-xl-8 col-lg-7">
+    <div class="col-xl-8 col-lg-7 col-md-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Recent Appointments</h6>
@@ -178,8 +178,8 @@
                         <table class="table table-bordered" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Patient</th>
-                                    <th>Service</th>
+                                    <th class="d-none d-md-table-cell">Patient</th>
+                                    <th class="d-none d-md-table-cell">Service</th>
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
@@ -188,11 +188,11 @@
                             <tbody>
                                 {% for appointment in recent_appointments %}
                                 <tr>
-                                    <td>
+                                    <td class="d-none d-md-table-cell">
                                         <strong>{{ appointment.name }}</strong><br>
                                         <small class="text-muted">{{ appointment.email }}</small>
                                     </td>
-                                    <td>{{ appointment.get_service_display }}</td>
+                                    <td class="d-none d-md-table-cell">{{ appointment.get_service_display }}</td>
                                     <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
                                     <td>
                                         <span class="badge {{ appointment.get_status_badge_class }}">
@@ -225,7 +225,7 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="col-xl-4 col-lg-5">
+    <div class="col-xl-4 col-lg-5 col-md-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
@@ -277,6 +277,56 @@
 }
 .text-xs {
     font-size: 0.7rem;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 0.75rem;
+    }
+    
+    .h5 {
+        font-size: 1.1rem;
+    }
+    
+    .text-xs {
+        font-size: 0.6rem;
+    }
+    
+    .fa-2x {
+        font-size: 1.5em;
+    }
+    
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: 0.5rem;
+    }
+    
+    .h5 {
+        font-size: 1rem;
+    }
+    
+    .text-xs {
+        font-size: 0.55rem;
+    }
+    
+    .fa-2x {
+        font-size: 1.3em;
+    }
+    
+    .table-responsive {
+        font-size: 0.8rem;
+    }
 }
 </style>
 {% endblock content %}
