@@ -1,0 +1,18 @@
+# Database Configuration
+DB_HOST=192.168.0.103
+DB_NAME=astha_therapy
+DB_USER=astha_therapy_web
+DB_PASSWORD=astha_apy_web
+DB_PORT=3306
+
+# Django Settings
+SECRET_KEY=django-insecure-your-secret-key-here-change-this-in-production
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1,192.168.0.103
+
+# Email Settings (if needed)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password 
