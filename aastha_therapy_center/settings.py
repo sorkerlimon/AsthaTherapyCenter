@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-(f&q1&roieo+rhh*6ym^6el&az_rak*80!-@smff$2=t)t8m!t')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -130,8 +130,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Site ID for Django Sites Framework
+
+# Site Framework settings
 SITE_ID = 1
+SITE_NAME = os.getenv('SITE_NAME', 'Aastha Therapy Center')
+SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'asthatherapycenter.com')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/

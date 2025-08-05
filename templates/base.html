@@ -1,19 +1,91 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 
 <head>
 	<!-- Meta -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="">
-	<meta name="keywords" content="">
-	<meta name="author" content="Awaiken">
+	<meta name="description" content="{% block meta_description %}Leading pediatric therapy center in Dhaka, Bangladesh offering speech therapy, occupational therapy, physical therapy, autism support, and early intervention services for children with developmental delays. Expert therapists providing personalized care for children's growth and development.{% endblock %}">
+	<meta name="keywords" content="{% block meta_keywords %}pediatric therapy, speech therapy, occupational therapy, physical therapy, autism support, child development, therapy center Dhaka, Bangladesh, early intervention, behavioral therapy, child therapy, developmental delays, special needs children, therapy services{% endblock %}">
+	<meta name="author" content="Aastha Therapy Center">
+	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+	<meta name="googlebot" content="index, follow">
+	<meta name="language" content="English">
+	<meta name="revisit-after" content="7 days">
+	
+	<!-- Open Graph Meta Tags -->
+	<meta property="og:title" content="{% block og_title %}Aastha Therapy Center - Pediatric Therapy Services in Dhaka{% endblock %}">
+	<meta property="og:description" content="{% block og_description %}Leading pediatric therapy center in Dhaka, Bangladesh offering speech therapy, occupational therapy, physical therapy, autism support, and early intervention services for children with developmental delays. Expert therapists providing personalized care for children's growth and development.{% endblock %}">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://asthatherapycenter.com{% block og_url %}{% endblock %}">
+	<meta property="og:image" content="https://asthatherapycenter.com{% static 'images/logo.svg' %}">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:site_name" content="Aastha Therapy Center">
+	<meta property="og:locale" content="en_US">
+	
+	<!-- Twitter Card Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="{% block twitter_title %}Aastha Therapy Center - Pediatric Therapy Services in Dhaka{% endblock %}">
+	<meta name="twitter:description" content="{% block twitter_description %}Leading pediatric therapy center in Dhaka, Bangladesh offering speech therapy, occupational therapy, physical therapy, autism support, and early intervention services for children with developmental delays. Expert therapists providing personalized care for children's growth and development.{% endblock %}">
+	<meta name="twitter:image" content="https://asthatherapycenter.com{% static 'images/logo.svg' %}">
+	<meta name="twitter:site" content="@asthatherapycenter">
+	
 	<!-- Page Title -->
-	<title>{% block title %}Aastha Therapy Center{% endblock %}</title>
+	<title>{% block title %}Aastha Therapy Center - Pediatric Therapy Services in Dhaka{% endblock %}</title>
+	
+	<!-- Canonical URL -->
+	<link rel="canonical" href="https://asthatherapycenter.com{% block canonical_url %}{% endblock %}">
+	
 	<!-- Favicon Icon -->
 	<link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
+	<link rel="apple-touch-icon" href="{% static 'images/favicon.png' %}">
+	
+	<!-- Structured Data for Organization -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "MedicalOrganization",
+		"name": "Aastha Therapy Center",
+		"description": "Leading pediatric therapy center in Dhaka, Bangladesh offering comprehensive therapy services for children with developmental delays.",
+		"url": "https://asthatherapycenter.com",
+		"logo": "https://asthatherapycenter.com{% static 'images/logo.svg' %}",
+		"image": "https://asthatherapycenter.com{% static 'images/logo.svg' %}",
+		"address": {
+			"@type": "PostalAddress",
+			"streetAddress": "House #123, Road #12, Block #A, Banani",
+			"addressLocality": "Dhaka",
+			"postalCode": "1213",
+			"addressCountry": "BD"
+		},
+		"contactPoint": {
+			"@type": "ContactPoint",
+			"telephone": "+8801712345678",
+			"contactType": "customer service",
+			"email": "info@asthatherapycenter.com"
+		},
+		"sameAs": [
+			"https://facebook.com/asthatherapycenter",
+			"https://twitter.com/asthatherapycenter",
+			"https://instagram.com/asthatherapycenter"
+		],
+		"openingHours": [
+			"Mo-Fr 10:00-18:00",
+			"Sa 10:00-15:00"
+		],
+		"medicalSpecialty": [
+			"Pediatric Therapy",
+			"Speech Therapy", 
+			"Occupational Therapy",
+			"Physical Therapy",
+			"Autism Support",
+			"Early Intervention"
+		]
+	}
+	</script>
+	
 	<!-- Google Fonts Css-->
 	<link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -56,9 +128,9 @@
                     <!-- Topbar Contact Information Start -->
                     <div class="topbar-contact-info">
                         <ul>
-                            <li><a href="#"><img src="{% static 'images/icon-phone.svg' %}" alt=""> +(123) 698-5245</a></li>
-                            <li><a href="#"><img src="{% static 'images/icon-mail.svg' %}" alt=""> info@domain.com</a></li>
-                            <li class="hide-mobile"><a href="#"><img src="{% static 'images/icon-location.svg' %}" alt=""> 24/11 Robert Road, New York, USA</a></li>
+                            <li><a href="tel:+8801712345678"><img src="{% static 'images/icon-phone.svg' %}" alt=""> (+880) 1712-345678</a></li>
+                            <li><a href="mailto:info@asthatherapycenter.com"><img src="{% static 'images/icon-mail.svg' %}" alt=""> info@asthatherapycenter.com</a></li>
+                            <li class="hide-mobile"><a href="#"><img src="{% static 'images/icon-location.svg' %}" alt=""> House #123, Road #12, Block #A, Banani, Dhaka-1213</a></li>
                         </ul>
                     </div>
                     <!-- Topbar Contact Information End -->
