@@ -1,0 +1,95 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ production ]
+  workflow_dispatch:
+
+env:
+  DEPLOY_PATH: /home/ubuntu/asthatherapycenter.com
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+    
+    - name: Verify SSH connection
+      run: |
+        ssh -p ${{ secrets.SSH_PORT || 22 }} -o ConnectTimeout=10 -o BatchMode=yes ubuntu@${{ secrets.HOST }} "echo 'SSH connection successful'"
+    
+    # - name: Deploy with rsync
+    #   run: |
+    #     rsync -avz --delete \
+    #       --exclude '.git' \
+    #       --exclude '__pycache__' \
+    #       --exclude '*.pyc' \
+    #       --exclude '.env' \
+    #       --exclude 'env_template.txt' \
+    #       --exclude 'env/' \
+    #       --exclude '.gitignore' \
+    #       --exclude 'README.md' \
+    #       --exclude 'db.sqlite3' \
+    #       --exclude '.github' \
+    #       --exclude 'Deploymnet' \
+    #       --exclude 'staticfiles/' \
+    #       --exclude 'media/' \
+    #       -e "ssh -p ${{ secrets.SSH_PORT || 22 }}" \
+    #       ./ ubuntu@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}/
+    
+    # - name: Run deployment commands on server
+    #   run: |
+    #     ssh -p ${{ secrets.SSH_PORT || 22 }} ubuntu@${{ secrets.HOST }} << 'EOF'
+    #       set -e
+    #       cd ${{ env.DEPLOY_PATH }}
+          
+    #       # Activate virtual environment
+    #       source env/bin/activate
+          
+    #       # Install/update Python dependencies
+    #       pip install -r requirements.txt
+          
+    #       # Run Django migrations
+    #       # python manage.py migrate --noinput
+          
+    #       # Collect static files
+    #       python manage.py collectstatic --noinput
+          
+    #       # Set proper permissions
+    #       sudo chown -R ubuntu:ubuntu ${{ env.DEPLOY_PATH }}
+    #       sudo chmod -R 755 ${{ env.DEPLOY_PATH }}
+          
+    #       # Restart Gunicorn service
+    #       sudo systemctl restart asthatherapycenter
+          
+    #       # Restart Nginx
+    #       sudo systemctl restart nginx
+          
+    #       # Check service status
+    #       sudo systemctl is-active asthatherapycenter
+    #       sudo systemctl is-active nginx
+    #     EOF
+    
+    # - name: Health check
+    #   run: |
+    #     sleep 10
+    #     curl -f https://${{ secrets.SITE_DOMAIN }} || curl -f http://${{ secrets.SITE_DOMAIN }}
+    
+    # - name: Notify deployment status
+    #   if: always()
+    #   run: |
+    #     if [ ${{ job.status }} == 'success' ]; then
+    #       echo "✅ Deployment successful to ${{ secrets.SITE_DOMAIN }}"
+    #     else
+    #       echo "❌ Deployment failed"
+    #       exit 1
+    #     fi
