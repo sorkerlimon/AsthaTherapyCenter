@@ -107,6 +107,396 @@
 	<!-- Main Custom Css -->
 	<link href="{% static 'css/custom.css' %}" rel="stylesheet" media="screen">
 	
+	<!-- Chatbot CSS -->
+	<style>
+		/* Chatbot Styles */
+		.chatbot-widget {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			z-index: 1001;
+			font-family: Arial, sans-serif;
+			pointer-events: none; /* Allow clicks to pass through */
+		}
+		
+		.chatbot-widget * {
+			pointer-events: auto; /* Re-enable clicks on chatbot elements */
+		}
+		
+		.chatbot-toggle {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #4a9b5e, #619E90);
+			border: none;
+			cursor: pointer;
+			box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.3s ease;
+		}
+		
+		.chatbot-toggle:hover {
+			transform: scale(1.1);
+			box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+		}
+		
+		.chatbot-toggle i {
+			color: white;
+			font-size: 20px;
+		}
+		
+		.chatbot-container {
+			position: absolute;
+			bottom: 80px;
+			right: 0;
+			width: 300px;
+			height: 400px;
+			background: white;
+			border-radius: 12px;
+			box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+			display: none;
+			flex-direction: column;
+			overflow: hidden;
+			max-width: calc(100vw - 40px);
+		}
+		
+		.chatbot-header {
+			background: linear-gradient(135deg, #4a9b5e, #619E90);
+			color: white;
+			padding: 10px 15px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		
+		.chatbot-header h4 {
+			margin: 0;
+			font-size: 14px;
+		}
+		
+		.chatbot-close {
+			background: none;
+			border: none;
+			color: white;
+			font-size: 20px;
+			cursor: pointer;
+			padding: 0;
+			width: 25px;
+			height: 25px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		.chatbot-messages {
+			flex: 1;
+			padding: 15px;
+			overflow-y: auto;
+			max-height: 280px;
+		}
+		
+		.chat-message {
+			margin-bottom: 12px;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		.chat-message.user {
+			align-items: flex-end;
+		}
+		
+		.chat-message.bot {
+			align-items: flex-start;
+		}
+		
+		.message-bubble {
+			max-width: 85%;
+			padding: 8px 12px;
+			border-radius: 15px;
+			word-wrap: break-word;
+			white-space: pre-wrap;
+			font-size: 13px;
+			line-height: 1.4;
+		}
+		
+		.message-bubble.user {
+			background: #4a9b5e;
+			color: white;
+		}
+		
+		.message-bubble.bot {
+			background: #f1f3f4;
+			color: #333;
+		}
+		
+		.message-time {
+			font-size: 11px;
+			color: #666;
+			margin-top: 5px;
+		}
+		
+		.chatbot-input {
+			padding: 12px 15px;
+			border-top: 1px solid #eee;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			box-sizing: border-box;
+		}
+		
+		.chatbot-input input {
+			flex: 1;
+			border: 1px solid #ddd;
+			border-radius: 20px;
+			padding: 8px 12px;
+			outline: none;
+			font-size: 13px;
+			box-sizing: border-box;
+			max-width: calc(100% - 45px);
+		}
+		
+		.chatbot-input input:focus {
+			border-color: #4a9b5e;
+		}
+		
+		.chatbot-send {
+			background: linear-gradient(135deg, #4a9b5e, #3d8249);
+			border: none;
+			border-radius: 50%;
+			width: 35px;
+			height: 35px;
+			color: white;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.3s ease;
+			font-size: 14px;
+			box-shadow: 0 2px 8px rgba(74, 155, 94, 0.3);
+		}
+		
+		.chatbot-send:hover {
+			background: linear-gradient(135deg, #3d8249, #2f6639);
+			transform: scale(1.05);
+			box-shadow: 0 3px 12px rgba(74, 155, 94, 0.4);
+		}
+		
+		.chatbot-send:disabled {
+			background: #ccc;
+			cursor: not-allowed;
+			transform: none;
+			box-shadow: none;
+		}
+		
+		.chatbot-send svg {
+			transition: transform 0.2s ease;
+		}
+		
+		.chatbot-send:hover svg {
+			transform: translateX(1px);
+		}
+		
+		.chatbot-send:active {
+			transform: scale(0.95);
+		}
+		
+		.typing-indicator {
+			display: none;
+			align-items: center;
+			gap: 5px;
+			color: #666;
+			font-style: italic;
+			margin-bottom: 15px;
+		}
+		
+		.typing-dots {
+			display: flex;
+			gap: 3px;
+		}
+		
+		.typing-dot {
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: #666;
+			animation: typing 1.4s infinite;
+		}
+		
+		.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+		.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+		
+		@keyframes typing {
+			0%, 60%, 100% { transform: translateY(0); }
+			30% { transform: translateY(-10px); }
+		}
+		
+		/* Mobile responsive */
+		@media (max-width: 768px) {
+			.chatbot-container {
+				width: 280px;
+				height: 350px;
+				bottom: 70px;
+				right: 0;
+				left: auto;
+				border-radius: 10px;
+				transform: translateX(-10px);
+			}
+			
+			.chatbot-widget {
+				bottom: 15px;
+				right: 15px;
+			}
+			
+			.chatbot-toggle {
+				width: 45px;
+				height: 45px;
+			}
+			
+			.chatbot-toggle i {
+				font-size: 18px;
+			}
+			
+			.chatbot-messages {
+				padding: 15px;
+				max-height: calc(100vh - 200px);
+			}
+			
+			.message-bubble {
+				max-width: 85%;
+				font-size: 14px;
+				padding: 8px 12px;
+			}
+			
+			.chatbot-input {
+				padding: 10px 12px !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: space-between !important;
+				gap: 8px !important;
+				background: white;
+				box-sizing: border-box;
+			}
+			
+			.chatbot-input input {
+				font-size: 16px; /* Prevents zoom on iOS */
+				padding: 8px 12px !important;
+				width: calc(100% - 50px) !important;
+				max-width: calc(100% - 50px) !important;
+				flex: 1 !important;
+				border-radius: 18px !important;
+				border: 1px solid #ddd !important;
+				box-sizing: border-box;
+			}
+			
+			.chatbot-send {
+				width: 38px !important;
+				height: 38px !important;
+				min-width: 38px !important;
+				min-height: 38px !important;
+				background: linear-gradient(135deg, #4a9b5e, #3d8249) !important;
+				border: 2px solid #4a9b5e !important;
+				border-radius: 50% !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				font-size: 16px;
+				box-shadow: 0 4px 12px rgba(74, 155, 94, 0.5) !important;
+				cursor: pointer !important;
+				transition: all 0.3s ease;
+				flex-shrink: 0 !important;
+				margin-left: auto !important;
+				position: relative;
+			}
+			
+			.chatbot-send svg {
+				width: 20px !important;
+				height: 20px !important;
+				color: white !important;
+				stroke: white !important;
+				fill: none !important;
+			}
+			
+			.chatbot-send:hover {
+				transform: scale(1.08) !important;
+				box-shadow: 0 6px 16px rgba(74, 155, 94, 0.6) !important;
+			}
+			
+			.chatbot-send:active {
+				transform: scale(0.95) !important;
+			}
+			
+			.chatbot-header {
+				padding: 12px 15px;
+			}
+			
+			.chatbot-header h4 {
+				font-size: 14px;
+			}
+		}
+		
+		/* Extra small mobile devices */
+		@media (max-width: 480px) {
+			.chatbot-container {
+				width: 260px;
+				height: 320px;
+				bottom: 60px;
+				right: 0;
+				left: auto;
+				transform: translateX(-5px);
+			}
+			
+			.chatbot-widget {
+				bottom: 10px;
+				right: 10px;
+			}
+			
+			.chatbot-toggle {
+				width: 40px;
+				height: 40px;
+			}
+			
+			.chatbot-toggle i {
+				font-size: 16px;
+			}
+			
+			.chatbot-input {
+				padding: 8px 10px !important;
+				gap: 6px !important;
+			}
+			
+			.chatbot-input input {
+				width: calc(100% - 45px) !important;
+				max-width: calc(100% - 45px) !important;
+				padding: 6px 10px !important;
+				font-size: 15px !important;
+			}
+			
+			.chatbot-send {
+				width: 36px !important;
+				height: 36px !important;
+				min-width: 36px !important;
+				min-height: 36px !important;
+				border: 2px solid #4a9b5e !important;
+			}
+			
+			.chatbot-send svg {
+				width: 18px !important;
+				height: 18px !important;
+			}
+		}
+		
+		/* Landscape orientation on mobile */
+		@media (max-width: 768px) and (orientation: landscape) {
+			.chatbot-container {
+				height: 280px;
+				bottom: 50px;
+			}
+		}
+	</style>
+	
 	{% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -154,7 +544,7 @@
     <!-- Topbar Section End -->
 
     <!-- Header Start -->
-    <header class="main-header">
+	<header class="main-header">
 		<div class="header-sticky">
 			<nav class="navbar navbar-expand-lg">
 				<div class="container">
@@ -200,7 +590,7 @@
 
     {% block page_header %}
     <!-- Page Header Start -->
-	<div class="page-header" style="margin-top: 140px;">
+	<div class="page-header">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
@@ -223,10 +613,8 @@
     {% endblock %}
 
     <!-- Main Content Start -->
-    <div class="main-content-wrapper">
-        {% block content %}
-        {% endblock %}
-    </div>
+    {% block content %}
+    {% endblock %}
     <!-- Main Content End -->
      
     <!-- Our Scrolling Ticker Section Start -->
@@ -359,7 +747,7 @@
                     <div class="col-lg-6 col-md-6">
                         <!-- Footer Copyright Start -->
                         <div class="footer-copyright-text">
-                            <p>&copy; 2025 Aastha Therapy Center. All Rights Reserved. | Developed by <a href="https://github.com/sorkerlimon" target="_blank" style="color: #007bff; text-decoration: none;">Dream Developer IT</a></p>
+                            <p>&copy; 2025 Aastha Therapy Center. All Rights Reserved. | Developed by <a href="https://github.com/sorkerlimon" target="_blank" style="color: #007bff; text-decoration: none;">Dream Developers IT</a></p>
                         </div>
                         <!-- Footer Copyright End -->
                     </div>
@@ -413,6 +801,214 @@
     <script src="{% static 'js/wow.js' %}"></script>
     <!-- Main Custom js file -->
     <script src="{% static 'js/function.js' %}"></script>
+    
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <button class="chatbot-toggle" id="chatbot-toggle">
+            <i class="fas fa-comments"></i>
+        </button>
+        
+        <div class="chatbot-container" id="chatbot-container">
+            <div class="chatbot-header">
+                <h4>💬 Astha Therapy Assistant</h4>
+                <button class="chatbot-close" id="chatbot-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="typing-indicator" id="typing-indicator">
+                    <span>Assistant is typing</span>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your message..." maxlength="500">
+                <button class="chatbot-send" id="chatbot-send" title="Send message">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chatbot JavaScript -->
+    <script>
+    class TherapyChatbot {
+        constructor() {
+            this.isOpen = false;
+            this.isInitialized = false;
+            this.apiBase = '{% url "astha_therapy_center_web:chatbot_init" %}';
+            this.responseUrl = '{% url "astha_therapy_center_web:chatbot_response" %}';
+            
+            this.initElements();
+            this.bindEvents();
+        }
+        
+        initElements() {
+            this.toggle = document.getElementById('chatbot-toggle');
+            this.container = document.getElementById('chatbot-container');
+            this.close = document.getElementById('chatbot-close');
+            this.messages = document.getElementById('chatbot-messages');
+            this.input = document.getElementById('chatbot-input');
+            this.send = document.getElementById('chatbot-send');
+            this.typingIndicator = document.getElementById('typing-indicator');
+        }
+        
+        bindEvents() {
+            this.toggle.addEventListener('click', () => this.toggleChat());
+            this.close.addEventListener('click', () => this.closeChat());
+            this.send.addEventListener('click', () => this.sendMessage());
+            this.input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.sendMessage();
+                }
+            });
+            
+            // Touch events for mobile
+            this.toggle.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.toggleChat();
+            });
+            
+            // Prevent body scroll when chat is open on mobile
+            this.container.addEventListener('touchmove', (e) => {
+                e.stopPropagation();
+            });
+            
+            // Handle viewport changes (mobile keyboard)
+            window.addEventListener('resize', () => {
+                if (this.isOpen) {
+                    setTimeout(() => this.scrollToBottom(), 100);
+                }
+            });
+        }
+        
+        toggleChat() {
+            if (this.isOpen) {
+                this.closeChat();
+            } else {
+                this.openChat();
+            }
+        }
+        
+        async openChat() {
+            this.isOpen = true;
+            this.container.style.display = 'flex';
+            this.input.focus();
+            
+            if (!this.isInitialized) {
+                await this.initializeChat();
+                this.isInitialized = true;
+            }
+        }
+        
+        closeChat() {
+            this.isOpen = false;
+            this.container.style.display = 'none';
+        }
+        
+        async initializeChat() {
+            try {
+                const response = await fetch(this.apiBase);
+                const data = await response.json();
+                
+                if (data.success) {
+                    this.addMessage(data.message, 'bot');
+                }
+            } catch (error) {
+                console.error('Failed to initialize chat:', error);
+                this.addMessage('Hi! Welcome to Astha Therapy Center. How can I help you today?', 'bot');
+            }
+        }
+        
+        async sendMessage() {
+            const message = this.input.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            this.addMessage(message, 'user');
+            this.input.value = '';
+            this.send.disabled = true;
+            
+            // Show typing indicator
+            this.showTyping();
+            
+            try {
+                const response = await fetch(this.responseUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+                
+                const data = await response.json();
+                
+                // Hide typing indicator
+                this.hideTyping();
+                
+                if (data.success) {
+                    this.addMessage(data.response, 'bot');
+                } else {
+                    this.addMessage('Sorry, I encountered an error. Please contact us at +880 16816-52122.', 'bot');
+                }
+            } catch (error) {
+                console.error('Failed to send message:', error);
+                this.hideTyping();
+                this.addMessage('Sorry, I\'m having trouble connecting. Please try again or contact us directly.', 'bot');
+            } finally {
+                this.send.disabled = false;
+            }
+        }
+        
+        addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            
+            const bubble = document.createElement('div');
+            bubble.className = `message-bubble ${sender}`;
+            bubble.textContent = text;
+            
+            const time = document.createElement('div');
+            time.className = 'message-time';
+            time.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.appendChild(bubble);
+            messageDiv.appendChild(time);
+            
+            // Insert before typing indicator
+            this.messages.insertBefore(messageDiv, this.typingIndicator);
+            this.scrollToBottom();
+        }
+        
+        showTyping() {
+            this.typingIndicator.style.display = 'flex';
+            this.scrollToBottom();
+        }
+        
+        hideTyping() {
+            this.typingIndicator.style.display = 'none';
+        }
+        
+        scrollToBottom() {
+            this.messages.scrollTop = this.messages.scrollHeight;
+        }
+    }
+    
+    // Initialize chatbot when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        new TherapyChatbot();
+    });
+    </script>
     
     {% block extra_scripts %}{% endblock %}
 </body>

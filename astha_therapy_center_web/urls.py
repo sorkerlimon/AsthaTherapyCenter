@@ -21,6 +21,10 @@ urlpatterns = [
     # SEO URLs
     path('sitemap.xml', views.sitemap, name='sitemap'),
     
+    # Chatbot URLs
+    path('api/chatbot/init/', views.chatbot_init, name='chatbot_init'),
+    path('api/chatbot/response/', views.chatbot_response, name='chatbot_response'),
+    
     # Authentication URLs
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
