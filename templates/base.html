@@ -107,6 +107,20 @@
 	<!-- Main Custom Css -->
 	<link href="{% static 'css/custom.css' %}" rel="stylesheet" media="screen">
 	
+	<!-- Fixed Navbar CSS -->
+	<style>
+		body {
+			padding-top: 0;
+		}
+		.main-content-wrapper {
+			margin-top: 100px;
+		}
+		/* Ensure topbar is not visible when navbar is fixed */
+		.topbar {
+			display: none;
+		}
+	</style>
+	
 	{% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -154,7 +168,8 @@
     <!-- Topbar Section End -->
 
     <!-- Header Start -->
-	<header class="main-header">
+    {% comment %} <header class="main-header"> {% endcomment %}
+	<header class="main-header" style="position: fixed; top: 0; width: 100%; z-index: 1000; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
 		<div class="header-sticky">
 			<nav class="navbar navbar-expand-lg">
 				<div class="container">
@@ -200,7 +215,7 @@
 
     {% block page_header %}
     <!-- Page Header Start -->
-	<div class="page-header">
+	<div class="page-header" style="margin-top: 100px;">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
@@ -223,8 +238,10 @@
     {% endblock %}
 
     <!-- Main Content Start -->
-    {% block content %}
-    {% endblock %}
+    <div class="main-content-wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
     <!-- Main Content End -->
      
     <!-- Our Scrolling Ticker Section Start -->
