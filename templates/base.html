@@ -128,9 +128,9 @@
                     <!-- Topbar Contact Information Start -->
                     <div class="topbar-contact-info">
                         <ul>
-                            <li><a href="tel:+8801712345678"><img src="{% static 'images/icon-phone.svg' %}" alt=""> (+880) 16352-009238</a></li>
-                            <li><a href="mailto:info@asthatherapycenter.com"><img src="{% static 'images/icon-mail.svg' %}" alt=""> info@asthatherapycenter.com</a></li>
-                            <li class="hide-mobile"><a href="#"><img src="{% static 'images/icon-location.svg' %}" alt=""> House #123, Road #12, Block #A, Banani, Dhaka-1213</a></li>
+                            <li><a href="tel:+8801712345678"><img src="{% static 'images/icon-phone.svg' %}" alt=""> (+880) 16816-52122</a></li>
+                            <li><a href="mailto:info@asthatherapycenter.com"><img src="{% static 'images/icon-mail.svg' %}" alt=""> asthatherapycenter@gmail.com</a></li>
+                            <li class="hide-mobile"><a href="#"><img src="{% static 'images/icon-location.svg' %}" alt=""> P# 9/2, R# 05, B# B, Sectio  n # 06, Mirpur, Dhaka-1216</a></li>
                         </ul>
                     </div>
                     <!-- Topbar Contact Information End -->
@@ -140,11 +140,11 @@
                     <!-- Topbar Social Links Start -->
                     <div class="topbar-social-links">
                         <ul>
-                            <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
+                            <li><a href="https://www.facebook.com/share/17AjwSyCaH/?mibextid=wwXIfr" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
                             <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+                            {% comment %} <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
                             <li><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
-                        </ul>
+                        </ul> {% endcomment %}
                     </div>
                     <!-- Topbar Social Links End -->
                 </div>
@@ -160,7 +160,7 @@
 				<div class="container">
 					<!-- Logo Start -->
 					<a class="navbar-brand" href="{% url 'astha_therapy_center_web:home' %}">
-						<img src="{% static 'images/logo.svg' %}" alt="Logo">
+						<img src="{% static 'images/asthatherapycenter.jpeg' %}" alt="Astha Therapy Center" style="height: 80px; width: auto; object-fit: contain;">
 					</a>
 					<!-- Logo End -->
 
@@ -185,7 +185,7 @@
                         </div>
                         <!-- Let's Start Button Start -->
                         <div class="header-btn d-inline-flex">
-                            <a href="#" class="btn-default">+(123) 698-5245</a>
+                            <a href="#" class="btn-default">+(880) 16816-52122</a>
                         </div>
                         <!-- Let's Start Button End -->
 					</div>
@@ -232,17 +232,17 @@
         <!-- Scrolling Ticker Start -->
         <div class="scrolling-ticker-box">
             <div class="scrolling-content">
-                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Emergency No. : (+01) 789 856 258</span>
-                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">For any additional inqueries : info@domainname.com</span>
-                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Book Appointment: (+01) 879 526 789</span>
-                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Working Hourse : Mon to Fri : 10:00 To 6:00 </span>
+                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Emergency No. : (+880) 16816-52122</span>
+                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">For any additional inqueries : asthatherapycenter@gmail.com</span>
+                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Book Appointment: (+880) 16816-52122</span>
+                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Working Hourse : Sat to Thu : 10:00 To 6:00 </span>
             </div>
 
             <div class="scrolling-content">
-                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Emergency No. : (+01) 789 856 258</span>
-                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">For any additional inqueries : info@domainname.com</span>
-                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Book Appointment: (+01) 879 526 789</span>
-                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Working Hourse : Mon to Fri : 10:00 To 6:00 </span>
+                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Emergency No. : (+880) 16816-52122</span>
+                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">For any additional inqueries : asthatherapycenter@gmail.com</span>
+                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Book Appointment: (+880) 16816-52122</span>
+                <span><img src="{% static 'images/icon-sparkles.svg' %}" alt="">Working Hourse : Sat to Thu : 10:00 To 6:00 </span>
             </div>
         </div>
     </div>
@@ -257,7 +257,7 @@
                     <div class="about-footer">
                         <!-- Footer Logo Start -->
                         <div class="footer-logo">
-                            <img src="{% static 'images/footer-logo.svg' %}" alt="">
+                            <img src="{% static 'images/asthatherapycenter.jpeg' %}" alt="Astha Therapy Center" style="height: 80px; width: auto; object-fit: contain;">
                         </div>
                         <!-- Footer Logo End -->
 
@@ -285,7 +285,7 @@
                     <div class="about-working-hour">
                         <h3>working hours</h3>
                         <ul>
-                            <li>mon to fri : 10:00 to 6:00</li>
+                            <li>sat to thu : 10:00 to 6:00</li>
                             <li>sat : 10:00AM to 3:00PM</li>
                             <li>sun : closed</li>
                         </ul>
@@ -318,7 +318,7 @@
                                     <img src="{% static 'images/icon-phone.svg' %}" alt="">
                                 </div>
                                 <div class="footer-info-box-content">
-                                    <p>(+0) 789 3456 012</p>
+                                    <p>(+880) 16816-52122</p>
                                 </div>                                
                             </div>
                             <!-- Footer Info Box End -->
@@ -329,7 +329,7 @@
                                     <img src="{% static 'images/icon-mail.svg' %}" alt="">
                                 </div>
                                 <div class="footer-info-box-content">
-                                    <p>domain@gmail.com</p>
+                                    <p>asthatherapycenter@gmail.com</p>
                                 </div>
                             </div>
                             <!-- Footer Info Box End -->
@@ -340,7 +340,7 @@
                                     <img src="{% static 'images/icon-location.svg' %}" alt="">
                                 </div>
                                 <div class="footer-info-box-content">
-                                    <p>24/11 Robert Road,New York,USA</p>
+                                    <p>P# 9/2, R# 05, B# B, Sectio  n # 06, Mirpur, Dhaka-1216</p>
                                 </div>                                
                             </div>
                             <!-- Footer Info Box End -->
