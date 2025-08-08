@@ -5,7 +5,12 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model
 from django import forms
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+import json
 from .models import Appointment, Contact, Therapist
+from bot_response import get_bot_response, get_initial_greeting
 
 # Get the custom user model
 User = get_user_model()
@@ -269,5 +274,55 @@ def sitemap(request):
     response['Content-Type'] = 'application/xml; charset=utf-8'
     return response
 
+# Chatbot Views
+@csrf_exempt
+@require_http_methods(["POST"])
+def chatbot_response(request):
+    """
+    Handle chatbot message requests
+    """
+    try:
+        data = json.loads(request.body)
+        user_message = data.get('message', '').strip()
+        
+        if not user_message:
+            return JsonResponse({
+                'success': False,
+                'error': 'Message cannot be empty'
+            }, status=400)
+        
+        # Get bot response
+        bot_response = get_bot_response(user_message)
+        
+        return JsonResponse(bot_response)
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'error': 'Invalid JSON data'
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': 'Server error occurred',
+            'details': str(e)
+        }, status=500)
 
-
+@require_http_methods(["GET"])
+def chatbot_init(request):
+    """
+    Initialize chatbot and get initial greeting
+    """
+    try:
+        initial_message = get_initial_greeting()
+        return JsonResponse({
+            'success': True,
+            'message': initial_message,
+            'timestamp': json.loads(json.dumps(get_bot_response('')))['timestamp']
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': 'Failed to initialize chatbot',
+            'details': str(e)
+        }, status=500)
