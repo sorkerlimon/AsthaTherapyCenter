@@ -107,20 +107,6 @@
 	<!-- Main Custom Css -->
 	<link href="{% static 'css/custom.css' %}" rel="stylesheet" media="screen">
 	
-	<!-- Fixed Navbar CSS -->
-	<style>
-		body {
-			padding-top: 0;
-		}
-		.main-content-wrapper {
-			margin-top: 100px;
-		}
-		/* Ensure topbar is not visible when navbar is fixed */
-		.topbar {
-			display: none;
-		}
-	</style>
-	
 	{% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -168,8 +154,7 @@
     <!-- Topbar Section End -->
 
     <!-- Header Start -->
-    {% comment %} <header class="main-header"> {% endcomment %}
-	<header class="main-header" style="position: fixed; top: 0; width: 100%; z-index: 1000; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <header class="main-header">
 		<div class="header-sticky">
 			<nav class="navbar navbar-expand-lg">
 				<div class="container">
@@ -215,7 +200,7 @@
 
     {% block page_header %}
     <!-- Page Header Start -->
-	<div class="page-header" style="margin-top: 100px;">
+	<div class="page-header" style="margin-top: 140px;">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
@@ -374,7 +359,7 @@
                     <div class="col-lg-6 col-md-6">
                         <!-- Footer Copyright Start -->
                         <div class="footer-copyright-text">
-                            <p>&copy; 2025 Aastha Therapy Center. All Rights Reserved. | Developed by <a href="https://github.com/sorkerlimon" target="_blank" style="color: #007bff; text-decoration: none;">Sorker Limon</a></p>
+                            <p>&copy; 2025 Aastha Therapy Center. All Rights Reserved. | Developed by <a href="https://github.com/sorkerlimon" target="_blank" style="color: #007bff; text-decoration: none;">Dream Developer IT</a></p>
                         </div>
                         <!-- Footer Copyright End -->
                     </div>
