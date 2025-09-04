@@ -4,10 +4,6 @@ from datetime import datetime
 from typing import Dict, List, Tuple
 
 class TherapyCenterChatBot:
-    """
-    Astha Therapy Center Chatbot
-    Provides automated responses for common patient inquiries
-    """
     
     def __init__(self):
         self.responses = {
